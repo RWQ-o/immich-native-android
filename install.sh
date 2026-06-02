@@ -100,6 +100,7 @@ TMP="$HOME/tmp/immich-build-$(uuidgen 2>/dev/null || date +%s | md5sum | head -c
 
 git clone https://github.com/immich-app/immich "$TMP" --depth=1 -b "$REV"
 cd "$TMP"
+pnpm config set approve-builds-globally true --global
 sed -i '/ignoredBuiltDependencies/,/^[^ ]/{ /^  - /d }; s/ignoredBuiltDependencies:/allowBuilds:/; s/set this to true or false/true/g' pnpm-workspace.yaml
 git reset --hard "$REV"
 rm -rf .git
