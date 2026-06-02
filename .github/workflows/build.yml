@@ -12,7 +12,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y ffmpeg libvips-dev jq uuid-runtime python3 python3-pip pipx
+          sudo apt install -y ffmpeg libvips-dev jq uuid-runtime python3 python3-pip python3-yaml pipx
           pipx install uv
           sudo ln -s ~/.local/bin/uv /usr/local/bin/uv
           npm install -g pnpm node-gyp
