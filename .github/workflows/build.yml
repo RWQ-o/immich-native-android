@@ -23,8 +23,10 @@ jobs:
           export npm_config_arch=arm64
           export npm_config_libc=glibc
           export NODE_OPTIONS=--max-old-space-size=4096
-          export PREFIX=/usr/local
+          export PREFIX=/home/runner/.local
           export TMPDIR=/tmp
+          mkdir -p /home/runner/.local/bin
+          mkdir -p /home/runner/.local/tmp
           bash install.sh
 
       - name: Upload artifact
