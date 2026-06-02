@@ -119,6 +119,7 @@ allowBuilds:
   sharp: true
   ssh2: true
   utimes: true
+  es5-ext: true
 PNPMEOF
 
 # Patch percorsi: /usr/src → IMMICH_PATH
