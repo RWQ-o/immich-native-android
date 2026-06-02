@@ -95,17 +95,31 @@ echo 'umask 077' > "$IMMICH_PATH/home/.bashrc"
 # Clone repository Immich
 # =============================================================================
 # Usa $HOME/tmp — /tmp è read-only su Android (Scoped Storage)
+
 mkdir -p "$HOME/tmp"
 TMP="$HOME/tmp/immich-build-$(uuidgen 2>/dev/null || date +%s | md5sum | head -c 16)"
-
 git clone https://github.com/immich-app/immich "$TMP" --depth=1 -b "$REV"
 cd "$TMP"
-export PNPM_HOME="/home/runner/.local/share/pnpm"
-export PATH="$PNPM_HOME/bin:$PATH"
-pnpm config set approve-builds-globally true --global
-sed -i '/ignoredBuiltDependencies/,/^[^ ]/{ /^  - /d }; s/ignoredBuiltDependencies:/allowBuilds:/; s/set this to true or false/true/g' pnpm-workspace.yaml
 git reset --hard "$REV"
 rm -rf .git
+cat >> pnpm-workspace.yaml << 'PNPMEOF'
+allowBuilds:
+  '@nestjs/core': true
+  '@parcel/watcher': true
+  '@scarf/scarf': true
+  '@swc/core': true
+  bcrypt: true
+  canvas: true
+  core-js: true
+  core-js-pure: true
+  cpu-features: true
+  esbuild: true
+  msgpackr-extract: true
+  protobufjs: true
+  sharp: true
+  ssh2: true
+  utimes: true
+PNPMEOF
 
 # Patch percorsi: /usr/src → IMMICH_PATH
 grep -Rl /usr/src | xargs -n1 sed -i -e "s@/usr/src@${IMMICH_PATH}@g"
