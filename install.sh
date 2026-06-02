@@ -100,28 +100,7 @@ TMP="$HOME/tmp/immich-build-$(uuidgen 2>/dev/null || date +%s | md5sum | head -c
 
 git clone https://github.com/immich-app/immich "$TMP" --depth=1 -b "$REV"
 cd "$TMP"
-python3 -c "
-import yaml, sys
-with open('pnpm-workspace.yaml', 'r') as f:
-    data = yaml.safe_load(f)
-data['allowBuilds'] = {
-    '@nestjs/core': True,
-    '@parcel/watcher': True,
-    '@swc/core': True,
-    'bcrypt': True,
-    'canvas': True,
-    'core-js': True,
-    'esbuild': True,
-    'msgpackr-extract': True,
-    'sharp': True,
-    'ssh2': True,
-    'utimes': True
-}
-if 'ignoredBuiltDependencies' in data:
-    del data['ignoredBuiltDependencies']
-with open('pnpm-workspace.yaml', 'w') as f:
-    yaml.dump(data, f)
-"
+sed -i '/ignoredBuiltDependencies/,/^[^ ]/{ /^  - /d }; s/ignoredBuiltDependencies:/allowBuilds:/; s/set this to true or false/true/g' pnpm-workspace.yaml
 git reset --hard "$REV"
 rm -rf .git
 
